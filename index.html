@@ -333,6 +333,277 @@ function majorFocusCourses(name,group){
  if(group==='지구과학'&&name.includes('우주'))return scienceCourseBundles[group];
  return null;
 }
+// 상담표의 과학 우선순위. 항공우주의 지구과학은 별도로 합의한 ◎를 적용한다.
+const scienceCounselingByMajor=new Map([
+ [
+  [
+   "의예과",
+   "치의예과"
+  ],
+  "○◎◎△",
+  "생명과학 + 화학"
+ ],
+ [
+  [
+   "약학과"
+  ],
+  "△◎◎–",
+  "화학 + 생명과학"
+ ],
+ [
+  [
+   "수의예과 · 수의학과",
+   "한의예과"
+  ],
+  "△◎◎△",
+  "생명과학 + 화학"
+ ],
+ [
+  [
+   "간호학과"
+  ],
+  "△○◎–",
+  "생명과학 → 화학"
+ ],
+ [
+  [
+   "임상병리학과"
+  ],
+  "–◎◎–",
+  "생명과학 + 화학"
+ ],
+ [
+  [
+   "방사선학과"
+  ],
+  "◎△○–",
+  "물리학 → 생명과학"
+ ],
+ [
+  [
+   "물리치료학과"
+  ],
+  "○△◎–",
+  "생명과학 → 물리학"
+ ],
+ [
+  [
+   "의공학과"
+  ],
+  "◎○◎–",
+  "물리학 + 생명과학"
+ ],
+ [
+  [
+   "생명과학과",
+   "생명공학과 · 생물공학과",
+   "의생명과학과",
+   "바이오의약공학과",
+   "시스템생명공학과"
+  ],
+  "△◎◎–",
+  "생명과학 + 화학"
+ ],
+ [
+  [
+   "미생물학과",
+   "생화학과",
+   "식품공학과",
+   "식품영양학과"
+  ],
+  "△◎◎–",
+  "화학 + 생명과학"
+ ],
+ [
+  [
+   "농생명과학과",
+   "동물자원학과"
+  ],
+  "–○◎△",
+  "생명과학 중심"
+ ],
+ [
+  [
+   "산림자원학과"
+  ],
+  "–△◎○",
+  "생명과학 + 지구과학"
+ ],
+ [
+  [
+   "화학과 · 응용화학과"
+  ],
+  "○◎○–",
+  "화학 중심"
+ ],
+ [
+  [
+   "지질학과",
+   "지구환경과학과"
+  ],
+  "○○△◎",
+  "지구과학 중심"
+ ],
+ [
+  [
+   "기상·대기과학과 · 대기과학과",
+   "천문우주학과 · 천문학과"
+  ],
+  "◎△–◎",
+  "물리학 + 지구과학"
+ ],
+ [
+  [
+   "해양학과"
+  ],
+  "○○○◎",
+  "지구과학 중심"
+ ],
+ [
+  [
+   "화학공학과"
+  ],
+  "○◎△–",
+  "화학 + 물리학"
+ ],
+ [
+  [
+   "신소재공학과 · 재료공학과",
+   "반도체공학과",
+   "디스플레이공학과"
+  ],
+  "◎◎––",
+  "물리학 + 화학"
+ ],
+ [
+  [
+   "고분자공학과"
+  ],
+  "○◎△–",
+  "화학 중심"
+ ],
+ [
+  [
+   "나노공학과"
+  ],
+  "◎◎△–",
+  "물리학 + 화학"
+ ],
+ [
+  [
+   "이차전지공학과"
+  ],
+  "○◎––",
+  "화학 → 물리학"
+ ],
+ [
+  [
+   "기계공학과"
+  ],
+  "◎○––",
+  "물리학 → 화학"
+ ],
+ [
+  [
+   "자동차공학과 · 스마트모빌리티학과",
+   "광공학과",
+   "원자력공학과"
+  ],
+  "◎○––",
+  "물리학 중심"
+ ],
+ [
+  [
+   "로봇공학과",
+   "메카트로닉스공학과",
+   "전기공학과",
+   "전자공학과"
+  ],
+  "◎△––",
+  "물리학 중심"
+ ],
+ [
+  [
+   "항공우주공학과"
+  ],
+  "◎△–◎",
+  "물리학 + 지구과학"
+ ],
+ [
+  [
+   "조선해양공학과"
+  ],
+  "◎○–○",
+  "물리학 중심"
+ ],
+ [
+  [
+   "에너지공학과"
+  ],
+  "◎◎–○",
+  "물리학 + 화학"
+ ],
+ [
+  [
+   "컴퓨터공학과"
+  ],
+  "○–––",
+  "수학 → 물리학"
+ ],
+ [
+  [
+   "소프트웨어학과",
+   "인공지능학과"
+  ],
+  "△–––",
+  "수학 중심"
+ ],
+ [
+  [
+   "데이터사이언스학과 · 빅데이터학과"
+  ],
+  "––––",
+  "수학·통계 중심"
+ ],
+ [
+  [
+   "건축공학과"
+  ],
+  "◎○–△",
+  "물리학 중심"
+ ],
+ [
+  [
+   "건축학과"
+  ],
+  "○△–△",
+  "물리학 우선"
+ ],
+ [
+  [
+   "토목공학과"
+  ],
+  "◎○–◎",
+  "물리학 + 지구과학"
+ ],
+ [
+  [
+   "도시공학과"
+  ],
+  "○△–○",
+  "물리학 + 지구과학"
+ ],
+ [
+  [
+   "환경공학과"
+  ],
+  "○◎○◎",
+  "화학 + 지구과학"
+ ]
+].flatMap(([names,symbols,combination])=>{
+ const ratings=Object.fromEntries(['물리학','화학','생명과학','지구과학'].map((group,index)=>[group,symbols[index]]));
+ return names.map(name=>[name,{ratings,combination}]);
+}));
 function universityRelation(m,group){
  const e=universityEvidence(m),subjects=relationSubjects[group]||[];
  const direct=subjects.filter(s=>e.direct.has(s)),related=subjects.filter(s=>e.related.has(s)&&!e.direct.has(s));
@@ -349,8 +620,10 @@ function universityRelation(m,group){
  const documented=direct.length+related.length;
  const science=Object.hasOwn(scienceCourseBundles,group);
  const editorialCore=Boolean(majorFocusCourses(m['세부학과'],group))||group==='생명과학'&&lifeSciencePriorityMajors.has(m['세부학과']);
- const symbol=editorialCore||coreCommon&&(science||documented>=3)?'◎':recommendedCommon&&(science||documented>=2)?'○':support?'△':'–';
- return {symbol,direct,related,support,total,ratio,coreSupport,coreRatio,editorialCore};
+ const counselingSymbol=scienceCounselingByMajor.get(m['세부학과'])?.ratings[group];
+ const inferredSymbol=editorialCore||coreCommon&&(science||documented>=3)?'◎':recommendedCommon&&(science||documented>=2)?'○':support?'△':'–';
+ const symbol=counselingSymbol??inferredSymbol;
+ return {symbol,direct,related,support,total,ratio,coreSupport,coreRatio,editorialCore,counselingSymbol};
 }
 
 // 사용자가 지정한 16개 대학. 순위가 아니라 대표 자료 우선 참고 목록이다.
@@ -400,8 +673,8 @@ function representativeCoursePlan(m){
   const fallback=candidates.filter(d=>!sorted.includes(d)).sort((a,b)=>groupScore(b)-groupScore(a));
   let ordered;
   const focusCourses=majorFocusCourses(key,group);
-  const majorLinked=Boolean(focusCourses);
-  if(majorLinked){
+  const majorLinked=Boolean(focusCourses||relation.counselingSymbol);
+  if(focusCourses){
    ordered=focusCourses;
   }else if(scienceCourseBundles[group]){
    ordered=[...scienceCourseBundles[group]];
@@ -553,6 +826,8 @@ function renderExamSubjectCards(m){
 
 
 function disciplineCombination(m){
+ const counseling=scienceCounselingByMajor.get(m['세부학과']);
+ if(counseling)return counseling.combination;
  const name=m['세부학과'],e=universityEvidence(m),plan=representativeCoursePlan(m);
  const schoolCourses=new Set([...e.schools.values()].flatMap(s=>[...s.courses]));
  const namedChoices=choices=>choices.filter(c=>schoolCourses.has(c)).slice(0,2).join(' + ');
@@ -605,7 +880,7 @@ function renderUniversityRelations(m){
  const cls={'◎':'rank-a','○':'rank-b','△':'rank-c','–':'rank-d'};
  const render=groups=>groups.map(group=>{
   const r=universityRelation(m,group),courses=[...r.direct,...r.related];
-  const detail=r.editorialCore?'전공 연계 핵심 · '+(majorFocusCourses(m['세부학과'],group)||scienceCourseBundles[group]).join(', '):courses.length?'비교 대학 '+r.total+'곳 중 '+r.support+'곳에서 확인 · '+courses.join(', '):'선정한 동일·유사 전공 자료에서 구체 과목 미확인';
+  const detail=r.counselingSymbol?'전공 연계 상담 기준 · '+({'◎':'핵심','○':'권장','△':'참고','–':'우선 추천 없음'}[r.symbol]):r.editorialCore?'전공 연계 핵심 · '+(majorFocusCourses(m['세부학과'],group)||scienceCourseBundles[group]).join(', '):courses.length?'비교 대학 '+r.total+'곳 중 '+r.support+'곳에서 확인 · '+courses.join(', '):'선정한 동일·유사 전공 자료에서 구체 과목 미확인';
   return '<div class="science-item" title="'+esc(detail)+'"><span>'+esc(group)+'</span><b class="'+cls[r.symbol]+'" aria-label="'+esc(detail)+'">'+r.symbol+'</b></div>';
  }).join('');
  $('#science').innerHTML=render(['물리학','화학','생명과학','지구과학']);
